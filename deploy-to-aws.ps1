@@ -1,10 +1,10 @@
 # AWS Deployment Script for Escal8 (PowerShell)
-# Account ID: 177099687548
+# Account ID: 550861864348
 
 $ErrorActionPreference = "Stop"
 
 # Configuration
-$AWS_ACCOUNT_ID = "177099687548"
+$AWS_ACCOUNT_ID = "550861864348"
 $AWS_REGION = "us-east-1"  # Change this to your preferred region
 $ECR_BACKEND_REPO = "escal8-backend"
 $ECR_FRONTEND_REPO = "escal8-frontend"
@@ -66,7 +66,47 @@ Write-Host ""
 Write-Host "Backend Image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_BACKEND_REPO`:latest"
 Write-Host "Frontend Image: $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_FRONTEND_REPO`:latest"
 Write-Host ""
-Write-Host "Next steps:" -ForegroundColor Cyan
-Write-Host "1. Deploy the CloudFormation stack using aws/cloudformation-template.yaml"
-Write-Host "2. Or use the ECS console to create services using these images"
-Write-Host "3. Update environment variables in AWS Systems Manager Parameter Store or ECS Task Definitions"
+
+# Step 5: Deploy CloudFormation Stack
+Write-Host "Step 5: Deploying CloudFormation stack..." -ForegroundColor Yellow
+$STACK_NAME = "escal8-production"
+
+try {
+    aws cloudformation describe-stacks --stack-name $STACK_NAME --region $AWS_REGION 2>$null
+    Write-Host "Stack already exists. Updating..." -ForegroundColor Yellow
+    aws cloudformation update-stack `
+        --stack-name $STACK_NAME `
+        --template-body file://aws/cloudformation-template.yaml `
+        --capabilities CAPABILITY_IAM `
+        --region $AWS_REGION
+    
+    Write-Host "Waiting for stack update to complete..." -ForegroundColor Yellow
+    aws cloudformation wait stack-update-complete --stack-name $STACK_NAME --region $AWS_REGION
+}
+catch {
+    Write-Host "Creating new stack..." -ForegroundColor Yellow
+    aws cloudformation create-stack `
+        --stack-name $STACK_NAME `
+        --template-body file://aws/cloudformation-template.yaml `
+        --capabilities CAPABILITY_IAM `
+        --region $AWS_REGION
+    
+    Write-Host "Waiting for stack creation to complete (this may take 5-10 minutes)..." -ForegroundColor Yellow
+    aws cloudformation wait stack-create-complete --stack-name $STACK_NAME --region $AWS_REGION
+}
+
+Write-Host ""
+Write-Host "=== Deployment Complete! ===" -ForegroundColor Green
+Write-Host ""
+
+# Get the Load Balancer URL
+$ALB_URL = aws cloudformation describe-stacks `
+    --stack-name $STACK_NAME `
+    --region $AWS_REGION `
+    --query "Stacks[0].Outputs[?OutputKey=='LoadBalancerURL'].OutputValue" `
+    --output text
+
+Write-Host "Your application is available at:" -ForegroundColor Cyan
+Write-Host $ALB_URL -ForegroundColor Green
+Write-Host ""
+Write-Host "Note: It may take a few minutes for the services to become healthy." -ForegroundColor Yellow

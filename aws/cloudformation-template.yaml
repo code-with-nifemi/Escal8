@@ -20,21 +20,6 @@ Parameters:
     Type: String
     Default: 10.0.2.0/24
 
-  SupabaseURL:
-    Type: String
-    Description: Supabase project URL
-    NoEcho: true
-
-  SupabaseKey:
-    Type: String
-    Description: Supabase anon key
-    NoEcho: true
-
-  ElevenLabsAPIKey:
-    Type: String
-    Description: ElevenLabs API key
-    NoEcho: true
-
 Resources:
   # VPC Configuration
   VPC:
@@ -274,16 +259,16 @@ Resources:
       ExecutionRoleArn: !GetAtt ECSTaskExecutionRole.Arn
       ContainerDefinitions:
         - Name: backend
-          Image: !Sub 177099687548.dkr.ecr.${AWS::Region}.amazonaws.com/escal8-backend:latest
+          Image: !Sub 550861864348.dkr.ecr.${AWS::Region}.amazonaws.com/escal8-backend:latest
           PortMappings:
             - ContainerPort: 8000
-          Environment:
+          Secrets:
             - Name: SUPABASE_URL
-              Value: !Ref SupabaseURL
+              ValueFrom: !Sub arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:escal8/supabase-url
             - Name: SUPABASE_KEY
-              Value: !Ref SupabaseKey
+              ValueFrom: !Sub arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:escal8/supabase-key
             - Name: ELEVENLABS_API_KEY
-              Value: !Ref ElevenLabsAPIKey
+              ValueFrom: !Sub arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:escal8/elevenlabs-key
           LogConfiguration:
             LogDriver: awslogs
             Options:
@@ -304,7 +289,7 @@ Resources:
       ExecutionRoleArn: !GetAtt ECSTaskExecutionRole.Arn
       ContainerDefinitions:
         - Name: frontend
-          Image: !Sub 177099687548.dkr.ecr.${AWS::Region}.amazonaws.com/escal8-frontend:latest
+          Image: !Sub 550861864348.dkr.ecr.${AWS::Region}.amazonaws.com/escal8-frontend:latest
           PortMappings:
             - ContainerPort: 3000
           Environment:

@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { ShieldAlert, Clock, Repeat, ThumbsDown } from 'lucide-react';
 
@@ -26,7 +28,7 @@ const features = [
 
 export const Features = () => {
   return (
-    <div className="bg-slate-950 py-24 sm:py-32 border-t border-slate-900">
+    <div id="features" className="bg-slate-950 py-24 sm:py-32 border-t border-slate-900">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl lg:text-center">
           <h2 className="text-base font-semibold leading-7 text-indigo-400">Deploy Hostility</h2>

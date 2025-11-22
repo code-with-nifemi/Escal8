@@ -2,7 +2,7 @@
 
 ## Account Information
 
-- **AWS Account ID**: 177099687548
+- **AWS Account ID**: 550861864348
 - **Default Region**: us-east-1 (change in scripts if needed)
 
 ## Prerequisites
