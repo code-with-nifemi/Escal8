@@ -19,6 +19,7 @@ import uuid
 import io
 import tempfile
 import httpx
+import random
 
 load_dotenv()
 
@@ -54,8 +55,24 @@ if openai_api_key:
 
     openai_client = OpenAI(api_key=openai_api_key)
 
-# Base agent configuration
-BASE_AGENT_ID = "agent_4301kak9z54ye2xt7apdc1encesz"
+# Base agent configuration - Multiple agents for random selection
+BASE_AGENT_IDS = [
+    os.getenv("BASE_AGENT_ID_1", "agent_4401kamradv5esha969hw9dgexma"),
+    os.getenv(
+        "BASE_AGENT_ID_2", "agent_4401kamradv5esha969hw9dgexma"
+    ),  # Fallback to ID_1 if not set
+    os.getenv(
+        "BASE_AGENT_ID_3", "agent_4401kamradv5esha969hw9dgexma"
+    ),  # Fallback to ID_1 if not set
+]
+
+# Legacy single agent ID for backwards compatibility
+BASE_AGENT_ID = os.getenv("BASE_AGENT_ID", "agent_4301kak9z54ye2xt7apdc1encesz")
+
+
+def get_random_base_agent_id():
+    """Select a random base agent ID from the configured list."""
+    return random.choice(BASE_AGENT_IDS)
 
 
 # Pydantic models
@@ -88,16 +105,33 @@ async def health_check():
 
 @app.get("/api/agents/base")
 async def get_base_agent():
-    """Get the base agent configuration."""
+    """Get information about all available base agents for cloning."""
     try:
-        # Fetch base agent directly by ID
-        base_agent = elevenlabs_client.conversational_ai.agents.get(
-            agent_id=BASE_AGENT_ID
-        )
+        base_agents_info = []
+
+        # Fetch details for each base agent
+        for agent_id in BASE_AGENT_IDS:
+            try:
+                base_agent = elevenlabs_client.conversational_ai.agents.get(
+                    agent_id=agent_id
+                )
+                base_agents_info.append(
+                    {
+                        "agent_id": base_agent.agent_id,
+                        "name": base_agent.name
+                        if hasattr(base_agent, "name")
+                        else "Base Agent",
+                    }
+                )
+            except Exception as agent_error:
+                print(f"Error fetching agent {agent_id}: {agent_error}")
+                # Continue with other agents if one fails
+                continue
 
         return {
-            "agent_id": base_agent.agent_id,
-            "name": base_agent.name if hasattr(base_agent, "name") else "Base Agent",
+            "base_agents": base_agents_info,
+            "count": len(base_agents_info),
+            "message": "When cloning, one of these agents will be randomly selected as the template.",
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -129,12 +163,17 @@ async def get_agent_websocket_url(agent_id: str):
 
 @app.post("/api/agents/clone")
 async def clone_agent(request: CloneAgentRequest):
-    """Clone the base agent with custom prompts using the duplicate method."""
+    """Clone a randomly selected base agent with custom prompts using the duplicate method."""
     try:
+        # Randomly select one of the base agents to clone from
+        selected_base_agent_id = get_random_base_agent_id()
+
+        print(f"Cloning from base agent: {selected_base_agent_id}")
+
         # Duplicate the base agent using ElevenLabs API
         # The duplicated agent will automatically inherit all settings from the base
         duplicated_agent = elevenlabs_client.conversational_ai.agents.duplicate(
-            agent_id=BASE_AGENT_ID, name=f"Custom Agent - {request.agent_name}"
+            agent_id=selected_base_agent_id, name=f"Custom Agent - {request.agent_name}"
         )
 
         # Extract agent_id from the duplicated agent response
@@ -151,7 +190,7 @@ async def clone_agent(request: CloneAgentRequest):
         # Store in Supabase with the extra prompts noted
         agent_data = {
             "elevenlabs_agent_id": new_agent_id,
-            "base_agent_id": BASE_AGENT_ID,
+            "base_agent_id": selected_base_agent_id,  # Track which base agent was used
             "name": request.agent_name,
             "extra_prompts": request.extra_prompts,
             "voice_id": None,  # Will be inherited from base agent
@@ -164,7 +203,8 @@ async def clone_agent(request: CloneAgentRequest):
             "agent_id": new_agent_id,
             "db_id": result.data[0]["id"],
             "name": request.agent_name,
-            "message": "Agent cloned successfully. Note: Extra prompts are stored but not yet applied to the agent behavior. See implementation notes for details.",
+            "base_agent_id": selected_base_agent_id,  # Return which base agent was cloned
+            "message": "Agent cloned successfully from one of our base personalities. Note: Extra prompts are stored but not yet applied to the agent behavior. See implementation notes for details.",
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

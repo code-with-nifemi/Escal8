@@ -1,0 +1,7 @@
+{
+  "name": "Friction.ai - The Future of Customer Deterrence",
+  "description": "A satirical landing page for an AI service designed to make customer service strictly worse.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
