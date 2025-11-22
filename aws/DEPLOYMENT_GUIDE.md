@@ -1,12 +1,14 @@
 # Escal8 AWS Deployment Guide
 
 ## Account Information
+
 - **AWS Account ID**: 177099687548
 - **Default Region**: us-east-1 (change in scripts if needed)
 
 ## Prerequisites
 
 1. **AWS CLI** installed and configured
+
    ```bash
    aws configure
    ```
@@ -87,6 +89,7 @@ aws cloudformation describe-stacks --stack-name escal8-production --region us-ea
 ### Option 3: Deploy via AWS Console
 
 1. **ECR Setup**:
+
    - Go to ECR in AWS Console
    - Create repositories: `escal8-backend` and `escal8-frontend`
    - Push images using the commands from Step 2 above
@@ -117,6 +120,7 @@ The CloudFormation template creates:
 After deployment completes (5-10 minutes):
 
 1. Get the Load Balancer URL:
+
    ```bash
    aws cloudformation describe-stacks --stack-name escal8-production --query "Stacks[0].Outputs[?OutputKey=='LoadBalancerURL'].OutputValue" --output text
    ```
@@ -186,6 +190,7 @@ aws ecs describe-services --cluster production-escal8-cluster --services product
 ### To Reduce Costs:
 
 1. Stop services when not in use:
+
    ```bash
    aws ecs update-service --cluster production-escal8-cluster --service production-escal8-backend-service --desired-count 0 --region us-east-1
    aws ecs update-service --cluster production-escal8-cluster --service production-escal8-frontend-service --desired-count 0 --region us-east-1
@@ -206,6 +211,7 @@ aws ecs describe-services --cluster production-escal8-cluster --services product
 ## Troubleshooting
 
 ### Containers not starting:
+
 ```bash
 # Check task logs
 aws ecs describe-tasks --cluster production-escal8-cluster --tasks <task-id> --region us-east-1
@@ -214,11 +220,13 @@ aws ecs describe-tasks --cluster production-escal8-cluster --tasks <task-id> --r
 ```
 
 ### Can't access application:
+
 - Verify security groups allow traffic on ports 80, 3000, 8000
 - Check target group health in ALB console
 - Verify environment variables are set correctly
 
 ### Build failures:
+
 - Ensure Docker is running
 - Check AWS credentials: `aws sts get-caller-identity`
 - Verify you're logged into ECR
@@ -226,6 +234,7 @@ aws ecs describe-tasks --cluster production-escal8-cluster --tasks <task-id> --r
 ## Support
 
 For issues or questions:
+
 1. Check CloudWatch logs
 2. Review ECS task definitions and services
 3. Verify environment variables in task definitions

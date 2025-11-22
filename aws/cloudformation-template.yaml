@@ -1,35 +1,35 @@
-AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Escal8 - AI Voice Conversation Platform Infrastructure'
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Escal8 - AI Voice Conversation Platform Infrastructure"
 
 Parameters:
   EnvironmentName:
     Type: String
     Default: production
     Description: Environment name (production/staging/development)
-  
+
   VpcCIDR:
     Type: String
     Default: 10.0.0.0/16
     Description: CIDR block for VPC
-  
+
   PublicSubnet1CIDR:
     Type: String
     Default: 10.0.1.0/24
-  
+
   PublicSubnet2CIDR:
     Type: String
     Default: 10.0.2.0/24
-  
+
   SupabaseURL:
     Type: String
     Description: Supabase project URL
     NoEcho: true
-  
+
   SupabaseKey:
     Type: String
     Description: Supabase anon key
     NoEcho: true
-  
+
   ElevenLabsAPIKey:
     Type: String
     Description: ElevenLabs API key
@@ -64,7 +64,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [0, !GetAZs '']
+      AvailabilityZone: !Select [0, !GetAZs ""]
       CidrBlock: !Ref PublicSubnet1CIDR
       MapPublicIpOnLaunch: true
       Tags:
@@ -75,7 +75,7 @@ Resources:
     Type: AWS::EC2::Subnet
     Properties:
       VpcId: !Ref VPC
-      AvailabilityZone: !Select [1, !GetAZs '']
+      AvailabilityZone: !Select [1, !GetAZs ""]
       CidrBlock: !Ref PublicSubnet2CIDR
       MapPublicIpOnLaunch: true
       Tags:
@@ -242,24 +242,24 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       AssumeRolePolicyDocument:
-        Version: '2012-10-17'
+        Version: "2012-10-17"
         Statement:
           - Effect: Allow
             Principal:
               Service: ecs-tasks.amazonaws.com
-            Action: 'sts:AssumeRole'
+            Action: "sts:AssumeRole"
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
       Policies:
         - PolicyName: SecretsManagerAccess
           PolicyDocument:
-            Version: '2012-10-17'
+            Version: "2012-10-17"
             Statement:
               - Effect: Allow
                 Action:
-                  - 'secretsmanager:GetSecretValue'
-                  - 'ssm:GetParameters'
-                Resource: '*'
+                  - "secretsmanager:GetSecretValue"
+                  - "ssm:GetParameters"
+                Resource: "*"
 
   # Backend Task Definition
   BackendTaskDefinition:
@@ -269,8 +269,8 @@ Resources:
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
-      Cpu: '512'
-      Memory: '1024'
+      Cpu: "512"
+      Memory: "1024"
       ExecutionRoleArn: !GetAtt ECSTaskExecutionRole.Arn
       ContainerDefinitions:
         - Name: backend
@@ -299,8 +299,8 @@ Resources:
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
-      Cpu: '512'
-      Memory: '1024'
+      Cpu: "512"
+      Memory: "1024"
       ExecutionRoleArn: !GetAtt ECSTaskExecutionRole.Arn
       ContainerDefinitions:
         - Name: frontend
@@ -367,15 +367,15 @@ Outputs:
   LoadBalancerURL:
     Description: URL of the Application Load Balancer
     Value: !Sub http://${ApplicationLoadBalancer.DNSName}
-  
+
   ECSClusterName:
     Description: Name of the ECS Cluster
     Value: !Ref ECSCluster
-  
+
   BackendServiceName:
     Description: Name of the Backend ECS Service
     Value: !GetAtt BackendService.Name
-  
+
   FrontendServiceName:
     Description: Name of the Frontend ECS Service
     Value: !GetAtt FrontendService.Name

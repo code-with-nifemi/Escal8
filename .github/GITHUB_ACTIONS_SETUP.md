@@ -51,13 +51,13 @@ Go to your GitHub repository settings and add these secrets:
 
 ### Required Secrets:
 
-| Secret Name | Description | Example |
-|------------|-------------|---------|
-| `AWS_ACCESS_KEY_ID` | AWS Access Key ID from IAM user | `AKIAIOSFODNN7EXAMPLE` |
-| `AWS_SECRET_ACCESS_KEY` | AWS Secret Access Key | `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY` |
-| `SUPABASE_URL` | Your Supabase project URL | `https://xxx.supabase.co` |
-| `SUPABASE_KEY` | Your Supabase anon/public key | `eyJhbGc...` |
-| `ELEVENLABS_API_KEY` | Your ElevenLabs API key | `sk_xxx...` |
+| Secret Name             | Description                     | Example                                    |
+| ----------------------- | ------------------------------- | ------------------------------------------ |
+| `AWS_ACCESS_KEY_ID`     | AWS Access Key ID from IAM user | `AKIAIOSFODNN7EXAMPLE`                     |
+| `AWS_SECRET_ACCESS_KEY` | AWS Secret Access Key           | `wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY` |
+| `SUPABASE_URL`          | Your Supabase project URL       | `https://xxx.supabase.co`                  |
+| `SUPABASE_KEY`          | Your Supabase anon/public key   | `eyJhbGc...`                               |
+| `ELEVENLABS_API_KEY`    | Your ElevenLabs API key         | `sk_xxx...`                                |
 
 ### How to Add Secrets:
 
@@ -127,7 +127,7 @@ Edit `.github/workflows/deploy-aws.yml`:
 
 ```yaml
 env:
-  AWS_REGION: ap-southeast-2  # Change to your region
+  AWS_REGION: ap-southeast-2 # Change to your region
 ```
 
 ### Change Stack Name:
@@ -142,7 +142,7 @@ Create a new workflow file `.github/workflows/deploy-staging.yml` and change:
 on:
   push:
     branches:
-      - develop  # Deploy staging from develop branch
+      - develop # Deploy staging from develop branch
 
 env:
   ECS_CLUSTER: staging-escal8-cluster

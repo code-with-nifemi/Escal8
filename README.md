@@ -26,6 +26,7 @@ npm run dev
 ## Overview
 
 This project demonstrates how to:
+
 - Build a modern dashboard with Next.js 16 and React 19
 - Create and manage ElevenLabs conversational AI agents
 - Implement real-time voice chat via WebSocket
@@ -148,6 +149,7 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 ### Database Setup
 
 The database tables have been created with the following migrations:
+
 - `create_user_profiles_table`
 - `create_agents_table`
 - `create_conversations_table`
@@ -177,6 +179,7 @@ npm run dev
 ```
 
 The application will be available at:
+
 - **Frontend (Escal8):** http://localhost:3000
 - **Dashboard:** http://localhost:3000
 - **Agents:** http://localhost:3000/agents
@@ -219,6 +222,7 @@ docker-compose up --build
 ### ✅ Implemented
 
 #### Dashboard (Escal8)
+
 - 📊 Real-time call metrics and analytics
 - 📈 Performance charts with Recharts
 - 🤖 Agent management interface
@@ -226,6 +230,7 @@ docker-compose up --build
 - 🧭 Sidebar navigation with routing
 
 #### Voice Chat
+
 - 🎤 Real-time audio streaming via WebSocket
 - 💬 Live transcription of user and agent speech
 - 🔊 Audio playback queue with interruption handling
@@ -233,12 +238,14 @@ docker-compose up --build
 - 📝 Message history display
 
 #### Agent Management
+
 - ➕ Create new AI agents with custom prompts
 - 🗂️ List all created agents
 - 🎙️ Start voice chat with any agent
 - 💾 All agents stored in Supabase
 
 #### Backend
+
 - 🚀 FastAPI with async/await
 - 🗄️ Supabase PostgreSQL database
 - 🤖 ElevenLabs Conversational AI integration
@@ -258,6 +265,7 @@ docker-compose up --build
 ### 1. Access the Dashboard
 
 Navigate to http://localhost:3000 to view:
+
 - Call metrics and analytics
 - Performance charts
 - Most called agents
@@ -285,6 +293,7 @@ Navigate to http://localhost:3000 to view:
 ### 4. View Conversation History
 
 All conversation history is automatically saved and can be:
+
 - Queried through the API (`GET /api/conversations/{id}/messages`)
 - Viewed directly in your Supabase dashboard
 
@@ -299,12 +308,14 @@ This can be changed by updating the `BASE_AGENT_ID` constant in `backend/app/mai
 ### API Integration
 
 The backend uses:
+
 - ElevenLabs Python SDK for agent operations (`elevenlabs_client.conversational_ai.agents.*`)
 - Supabase Python client for database operations
 
 ### Frontend Architecture
 
 The Escal8 frontend uses:
+
 - **Next.js App Router** for routing and server-side rendering
 - **React Hooks** (`useState`, `useEffect`, `useRef`) for state management
 - **Custom Hooks** (`useAgentConversation`) for WebSocket voice chat logic
@@ -324,13 +335,15 @@ The Escal8 frontend uses:
 ### Common Issues
 
 #### Backend Issues
+
 1. **Missing environment variables**: Ensure all required variables are set in `backend/.env`
 2. **Database connection errors**: Verify Supabase URL and anon key
 3. **ElevenLabs API errors**: Check API key validity and rate limits
 4. **CORS errors**: Backend allows `http://localhost:3000` (Escal8) by default
 
 #### Frontend Issues
-1. **Can't access microphone**: 
+
+1. **Can't access microphone**:
    - Check browser permissions
    - Use HTTPS in production (microphone requires secure context)
    - Try Chrome/Edge for best Web Audio API support
@@ -346,11 +359,13 @@ The Escal8 frontend uses:
 ### Debug Mode
 
 Run the backend with debug logging:
+
 ```bash
 uvicorn app.main:app --reload --log-level debug
 ```
 
 Check browser console for frontend errors:
+
 ```
 F12 → Console tab
 ```
@@ -363,18 +378,18 @@ This is a hackathon project. Feel free to extend and modify as needed.
 
 ### Why Escal8 over /frontend?
 
-| Feature | Escal8 (Main) | /frontend (Legacy) |
-|---------|---------------|---------------------|
-| **Framework** | Next.js 16 + React 19 | React 18 + Vite |
-| **Routing** | App Router (built-in) | Single page |
-| **Dashboard** | ✅ Full analytics dashboard | ❌ No dashboard |
-| **Design** | Professional Escal8 system | Basic Tailwind |
-| **Navigation** | Sidebar with routing | Basic view switching |
-| **Charts** | Recharts integration | None |
-| **Voice Chat** | ✅ Full integration | ✅ Full integration |
-| **Agent Management** | ✅ Full CRUD UI | ✅ Basic UI |
-| **Port** | 3000 | 5173 |
-| **Recommended** | ✅ **YES** | ❌ Deprecated |
+| Feature              | Escal8 (Main)               | /frontend (Legacy)   |
+| -------------------- | --------------------------- | -------------------- |
+| **Framework**        | Next.js 16 + React 19       | React 18 + Vite      |
+| **Routing**          | App Router (built-in)       | Single page          |
+| **Dashboard**        | ✅ Full analytics dashboard | ❌ No dashboard      |
+| **Design**           | Professional Escal8 system  | Basic Tailwind       |
+| **Navigation**       | Sidebar with routing        | Basic view switching |
+| **Charts**           | Recharts integration        | None                 |
+| **Voice Chat**       | ✅ Full integration         | ✅ Full integration  |
+| **Agent Management** | ✅ Full CRUD UI             | ✅ Basic UI          |
+| **Port**             | 3000                        | 5173                 |
+| **Recommended**      | ✅ **YES**                  | ❌ Deprecated        |
 
 **Use Escal8** for the complete experience with dashboard, analytics, and professional UI.
 

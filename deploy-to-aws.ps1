@@ -19,13 +19,15 @@ Write-Host ""
 Write-Host "Step 1: Creating ECR repositories..." -ForegroundColor Yellow
 try {
     aws ecr describe-repositories --repository-names $ECR_BACKEND_REPO --region $AWS_REGION 2>$null
-} catch {
+}
+catch {
     aws ecr create-repository --repository-name $ECR_BACKEND_REPO --region $AWS_REGION
 }
 
 try {
     aws ecr describe-repositories --repository-names $ECR_FRONTEND_REPO --region $AWS_REGION 2>$null
-} catch {
+}
+catch {
     aws ecr create-repository --repository-name $ECR_FRONTEND_REPO --region $AWS_REGION
 }
 
