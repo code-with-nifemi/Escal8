@@ -7,17 +7,17 @@ import TabbedMetricsWithChart from '@/components/TabbedMetricsWithChart';
 import Charts from '@/components/Charts';
 import AgentsList from '@/components/AgentsList';
 
-export default function DashboardPage() {
+export default function Dashboard() {
   const [activeTab, setActiveTab] = useState('calls');
   const [selectedAgent, setSelectedAgent] = useState('All agents');
 
   return (
-    <div className="flex h-screen bg-slate-50">
+    <div className="h-screen bg-slate-50">
       {/* Sidebar */}
       <Sidebar />
-      
+
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="ml-64 flex flex-col h-screen overflow-hidden">
         {/* Header */}
         <DashboardHeader selectedAgent={selectedAgent} onAgentChange={setSelectedAgent} />
         

@@ -24,21 +24,21 @@ const MetricsCards = () => {
   const metrics = [
     {
       title: 'Number of calls',
-      value: 16,
+      value: 17,
     },
     {
       title: 'Average duration',
       value: '0:51',
     },
     {
-      title: 'Total minutes',
+      title: 'Policy Contradictions',
       value: '13.6',
       unit: 'min',
     },
     {
-      title: 'Average minutes',
+      title: 'Corporate Buzzwords Per Minute',
       value: '0.85',
-      unit: 'min/call',
+      unit: 'BPM',
     },
   ];
 

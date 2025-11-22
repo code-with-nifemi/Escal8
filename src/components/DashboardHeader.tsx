@@ -22,7 +22,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ selectedAgent, onAgen
       {/* Workspace info */}
       <div className="mt-6">
         <p className="text-sm text-gray-500 mb-1">My Workspace</p>
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Good afternoon, Tanda hackathon team</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Good afternoon, TechCorp Solutions</h1>
         
         {/* Filter controls */}
         <div className="flex items-center gap-4">

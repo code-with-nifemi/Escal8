@@ -11,7 +11,7 @@ const features = [
   },
   {
     name: 'Gaslighting-as-a-Service (GaaS)',
-    description: 'Did the customer actually pay their bill? Our AI will convince them they didn't, and that they also never existed.',
+    description: 'Did the customer actually pay their bill? Our AI will convince them they did not, and that they also never existed.',
     icon: ShieldAlert,
   },
   {
@@ -21,7 +21,7 @@ const features = [
   },
   {
     name: 'Empathy Nullification',
-    description: 'Detects frustration in a user\'s voice and responds with increased cheerfulness and bureaucracy.',
+    description: 'Detects frustration in a user voice and responds with increased cheerfulness and bureaucracy.',
     icon: ThumbsDown,
   },
 ];
