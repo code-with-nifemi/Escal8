@@ -1,6 +1,8 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { 
   Home, 
   Users, 
@@ -11,46 +13,69 @@ import {
 } from 'lucide-react';
 
 const Sidebar = () => {
+  const pathname = usePathname();
+
   const menuItems = [
-    { icon: Home, label: 'Home', active: true },
+    { icon: Home, label: 'Home', href: '/' },
   ];
 
   const buildItems = [
-    { icon: Users, label: 'Agents' },
-    { icon: BookOpen, label: 'Knowledge Base' },
+    { icon: Users, label: 'Agents', href: '/agents' },
+    { icon: BookOpen, label: 'Knowledge Base', href: '#' },
   ];
 
   const evaluateItems = [
-    { icon: Users, label: 'Conversations' },
-    { icon: TestTube, label: 'Tests' },
+    { icon: Users, label: 'Conversations', href: '#' },
+    { icon: TestTube, label: 'Tests', href: '#' },
   ];
 
   const telephonyItems = [
-    { icon: Phone, label: 'Phone Numbers' },
+    { icon: Phone, label: 'Phone Numbers', href: '#' },
   ];
 
   const bottomItems = [
-    { icon: Settings, label: 'Settings' },
+    { icon: Settings, label: 'Settings', href: '#' },
   ];
 
-  const renderMenuItem = (item: any, isActive = false) => (
-    <div
-      key={item.label}
-      className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors ${
-        isActive 
-          ? 'bg-gray-100 text-gray-900' 
-          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-      }`}
-    >
-      <item.icon size={18} />
-      <span className="text-sm font-medium">{item.label}</span>
-      {item.badge && (
-        <span className="ml-auto bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
-          {item.badge}
-        </span>
-      )}
-    </div>
-  );
+  const renderMenuItem = (item: any) => {
+    const isActive = pathname === item.href;
+    const content = (
+      <>
+        <item.icon size={18} />
+        <span className="text-sm font-medium">{item.label}</span>
+        {item.badge && (
+          <span className="ml-auto bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+            {item.badge}
+          </span>
+        )}
+      </>
+    );
+
+    if (item.href === '#') {
+      return (
+        <div
+          key={item.label}
+          className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+        >
+          {content}
+        </div>
+      );
+    }
+
+    return (
+      <Link
+        key={item.label}
+        href={item.href}
+        className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors ${
+          isActive 
+            ? 'bg-gray-100 text-gray-900' 
+            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+        }`}
+      >
+        {content}
+      </Link>
+    );
+  };
 
   const renderSection = (title: string, items: any[]) => (
     <div className="mb-6">
@@ -58,7 +83,7 @@ const Sidebar = () => {
         {title}
       </h3>
       <div className="space-y-1">
-        {items.map(item => renderMenuItem(item))}
+        {items.map(renderMenuItem)}
       </div>
     </div>
   );
@@ -80,7 +105,7 @@ const Sidebar = () => {
         {/* Main Navigation */}
         <div className="mb-6">
           <div className="space-y-1">
-            {menuItems.map(item => renderMenuItem(item, item.active))}
+            {menuItems.map(renderMenuItem)}
           </div>
         </div>
 
@@ -92,7 +117,7 @@ const Sidebar = () => {
       {/* Bottom Section */}
       <div className="p-4 border-t border-gray-200">
         <div className="space-y-1">
-          {bottomItems.map(item => renderMenuItem(item))}
+          {bottomItems.map(renderMenuItem)}
         </div>
         
         {/* User Profile */}
