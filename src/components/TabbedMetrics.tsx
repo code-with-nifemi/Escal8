@@ -20,7 +20,7 @@ const TabbedMetrics: React.FC<TabbedMetricsProps> = ({ activeTab, onTabChange })
     {
       id: 'calls',
       title: 'Number of calls',
-      value: 16,
+      value: 17,
     },
     {
       id: 'duration',
@@ -29,7 +29,7 @@ const TabbedMetrics: React.FC<TabbedMetricsProps> = ({ activeTab, onTabChange })
     },
     {
       id: 'total-minutes',
-      title: 'Total minutes',
+      title: 'Policy Contradictions',
       value: '13.6',
       unit: 'min',
     },

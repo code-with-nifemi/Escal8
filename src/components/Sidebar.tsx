@@ -9,7 +9,8 @@ import {
   BookOpen, 
   TestTube, 
   Phone, 
-  Settings
+  Settings,
+  Trophy
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -21,12 +22,13 @@ const Sidebar = () => {
 
   const buildItems = [
     { icon: Users, label: 'Agents', href: '/agents' },
-    { icon: BookOpen, label: 'Knowledge Base', href: '#' },
+    { icon: BookOpen, label: 'Knowledge Base', href: '/knowledge-base' },
   ];
 
   const evaluateItems = [
     { icon: Users, label: 'Conversations', href: '#' },
     { icon: TestTube, label: 'Tests', href: '#' },
+    { icon: Trophy, label: 'Leaderboard', href: '/leaderboard' },
   ];
 
   const telephonyItems = [
@@ -89,14 +91,14 @@ const Sidebar = () => {
   );
 
   return (
-    <div className="w-64 bg-white border-r border-gray-200 h-screen flex flex-col">
+    <div className="fixed left-0 top-0 w-64 bg-white border-r border-gray-200 h-screen flex flex-col z-10">
       {/* Logo */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 bg-black rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-sm">E8</span>
           </div>
-          <span className="font-semibold text-lg">Escal8</span>
+          <span className="font-semibold text-lg text-gray-900">Escal8</span>
         </div>
       </div>
 
@@ -128,7 +130,7 @@ const Sidebar = () => {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-900 truncate">
-                Tanda hackathon team
+                TechCorp Solutions
               </p>
               <p className="text-xs text-gray-500 truncate">My Workspace</p>
             </div>

@@ -23,30 +23,30 @@ const TabbedMetricsWithChart: React.FC<TabbedMetricsWithChartProps> = ({ activeT
       case 'Middle Management Queen':
         return {
           calls: 14,
-          duration: '0:48',
-          totalMinutes: '11.2',
-          avgMinutes: '0.8',
+          buzzwords: '28.5',
+          contradictions: 15,
+          rageQuits: 8,
         };
       case 'Jordan - Help Desk Employee':
         return {
           calls: 2,
-          duration: '1:15',
-          totalMinutes: '2.5',
-          avgMinutes: '1.25',
+          buzzwords: '22.3',
+          contradictions: 11,
+          rageQuits: 4,
         };
       case 'Richard - CEO/Executive':
         return {
           calls: 1,
-          duration: '0:30',
-          totalMinutes: '0.5',
-          avgMinutes: '0.5',
+          buzzwords: '29.7',
+          contradictions: 13,
+          rageQuits: 6,
         };
       default: // All agents
         return {
-          calls: 16,
-          duration: '0:51',
-          totalMinutes: '13.6',
-          avgMinutes: '0.85',
+          calls: 17,
+          buzzwords: '26.8',
+          contradictions: 13,
+          rageQuits: 6,
         };
     }
   };
@@ -56,25 +56,24 @@ const TabbedMetricsWithChart: React.FC<TabbedMetricsWithChartProps> = ({ activeT
   const metrics: MetricTab[] = [
     {
       id: 'calls',
-      title: 'Number of calls',
+      title: 'Number of Calls',
       value: agentData.calls,
     },
     {
-      id: 'duration',
-      title: 'Average duration',
-      value: agentData.duration,
+      id: 'buzzwords',
+      title: 'Buzzwords Per Minute',
+      value: agentData.buzzwords,
+      unit: '/min',
     },
     {
-      id: 'total-minutes',
-      title: 'Total minutes',
-      value: agentData.totalMinutes,
-      unit: 'min',
+      id: 'contradictions',
+      title: 'Policy Contradictions',
+      value: agentData.contradictions,
     },
     {
-      id: 'avg-minutes',
-      title: 'Average minutes',
-      value: agentData.avgMinutes,
-      unit: 'min/call',
+      id: 'rage-quits',
+      title: 'Total Rage Quits',
+      value: agentData.rageQuits,
     },
   ];
 
@@ -95,7 +94,7 @@ const TabbedMetricsWithChart: React.FC<TabbedMetricsWithChartProps> = ({ activeT
           { date: 'Nov 21', value: 0 },
           { date: 'Nov 22', value: 1 },
         ],
-        duration: [
+        buzzwords: [
           { date: 'Oct 23', value: 0 },
           { date: 'Oct 24', value: 0 },
           { date: 'Oct 25', value: 0 },
@@ -106,9 +105,9 @@ const TabbedMetricsWithChart: React.FC<TabbedMetricsWithChartProps> = ({ activeT
           { date: 'Oct 30', value: 0 },
           { date: 'Nov 20', value: 0 },
           { date: 'Nov 21', value: 0 },
-          { date: 'Nov 22', value: 30 },
+          { date: 'Nov 22', value: 29.7 },
         ],
-        'total-minutes': [
+        contradictions: [
           { date: 'Oct 23', value: 0 },
           { date: 'Oct 24', value: 0 },
           { date: 'Oct 25', value: 0 },
@@ -119,9 +118,9 @@ const TabbedMetricsWithChart: React.FC<TabbedMetricsWithChartProps> = ({ activeT
           { date: 'Oct 30', value: 0 },
           { date: 'Nov 20', value: 0 },
           { date: 'Nov 21', value: 0 },
-          { date: 'Nov 22', value: 0.5 },
+          { date: 'Nov 22', value: 13 },
         ],
-        'avg-minutes': [
+        'rage-quits': [
           { date: 'Oct 23', value: 0 },
           { date: 'Oct 24', value: 0 },
           { date: 'Oct 25', value: 0 },
@@ -132,7 +131,7 @@ const TabbedMetricsWithChart: React.FC<TabbedMetricsWithChartProps> = ({ activeT
           { date: 'Oct 30', value: 0 },
           { date: 'Nov 20', value: 0 },
           { date: 'Nov 21', value: 0 },
-          { date: 'Nov 22', value: 0.5 },
+          { date: 'Nov 22', value: 6 },
         ],
       };
     } else if (agent === 'Middle Management Queen') {
@@ -150,44 +149,44 @@ const TabbedMetricsWithChart: React.FC<TabbedMetricsWithChartProps> = ({ activeT
           { date: 'Nov 21', value: 6 },
           { date: 'Nov 22', value: 14 },
         ],
-        duration: [
+        buzzwords: [
           { date: 'Oct 23', value: 0 },
           { date: 'Oct 24', value: 0 },
-          { date: 'Oct 25', value: 25 },
+          { date: 'Oct 25', value: 22 },
           { date: 'Oct 26', value: 0 },
-          { date: 'Oct 27', value: 35 },
-          { date: 'Oct 28', value: 28 },
-          { date: 'Oct 29', value: 40 },
-          { date: 'Oct 30', value: 35 },
-          { date: 'Nov 20', value: 42 },
-          { date: 'Nov 21', value: 45 },
-          { date: 'Nov 22', value: 48 },
+          { date: 'Oct 27', value: 24 },
+          { date: 'Oct 28', value: 23 },
+          { date: 'Oct 29', value: 26 },
+          { date: 'Oct 30', value: 25 },
+          { date: 'Nov 20', value: 27 },
+          { date: 'Nov 21', value: 28 },
+          { date: 'Nov 22', value: 28.5 },
         ],
-        'total-minutes': [
+        contradictions: [
           { date: 'Oct 23', value: 0 },
           { date: 'Oct 24', value: 0 },
-          { date: 'Oct 25', value: 0.4 },
+          { date: 'Oct 25', value: 2 },
           { date: 'Oct 26', value: 0 },
-          { date: 'Oct 27', value: 1.2 },
-          { date: 'Oct 28', value: 0.5 },
-          { date: 'Oct 29', value: 1.3 },
-          { date: 'Oct 30', value: 1.2 },
-          { date: 'Nov 20', value: 2.1 },
-          { date: 'Nov 21', value: 4.5 },
-          { date: 'Nov 22', value: 11.2 },
+          { date: 'Oct 27', value: 4 },
+          { date: 'Oct 28', value: 3 },
+          { date: 'Oct 29', value: 6 },
+          { date: 'Oct 30', value: 5 },
+          { date: 'Nov 20', value: 9 },
+          { date: 'Nov 21', value: 12 },
+          { date: 'Nov 22', value: 15 },
         ],
-        'avg-minutes': [
+        'rage-quits': [
           { date: 'Oct 23', value: 0 },
           { date: 'Oct 24', value: 0 },
-          { date: 'Oct 25', value: 0.4 },
+          { date: 'Oct 25', value: 1 },
           { date: 'Oct 26', value: 0 },
-          { date: 'Oct 27', value: 0.6 },
-          { date: 'Oct 28', value: 0.5 },
-          { date: 'Oct 29', value: 0.65 },
-          { date: 'Oct 30', value: 0.6 },
-          { date: 'Nov 20', value: 0.7 },
-          { date: 'Nov 21', value: 0.75 },
-          { date: 'Nov 22', value: 0.8 },
+          { date: 'Oct 27', value: 2 },
+          { date: 'Oct 28', value: 1 },
+          { date: 'Oct 29', value: 3 },
+          { date: 'Oct 30', value: 2 },
+          { date: 'Nov 20', value: 5 },
+          { date: 'Nov 21', value: 7 },
+          { date: 'Nov 22', value: 8 },
         ],
       };
     } else if (agent === 'Jordan - Help Desk Employee') {
@@ -205,44 +204,44 @@ const TabbedMetricsWithChart: React.FC<TabbedMetricsWithChartProps> = ({ activeT
           { date: 'Nov 21', value: 1 },
           { date: 'Nov 22', value: 2 },
         ],
-        duration: [
+        buzzwords: [
           { date: 'Oct 23', value: 0 },
           { date: 'Oct 24', value: 0 },
           { date: 'Oct 25', value: 0 },
           { date: 'Oct 26', value: 0 },
           { date: 'Oct 27', value: 0 },
           { date: 'Oct 28', value: 0 },
-          { date: 'Oct 29', value: 80 },
+          { date: 'Oct 29', value: 21 },
           { date: 'Oct 30', value: 0 },
           { date: 'Nov 20', value: 0 },
-          { date: 'Nov 21', value: 70 },
-          { date: 'Nov 22', value: 75 },
+          { date: 'Nov 21', value: 21.5 },
+          { date: 'Nov 22', value: 22.3 },
         ],
-        'total-minutes': [
+        contradictions: [
           { date: 'Oct 23', value: 0 },
           { date: 'Oct 24', value: 0 },
           { date: 'Oct 25', value: 0 },
           { date: 'Oct 26', value: 0 },
           { date: 'Oct 27', value: 0 },
           { date: 'Oct 28', value: 0 },
-          { date: 'Oct 29', value: 1.3 },
+          { date: 'Oct 29', value: 5 },
           { date: 'Oct 30', value: 0 },
           { date: 'Nov 20', value: 0 },
-          { date: 'Nov 21', value: 1.2 },
-          { date: 'Nov 22', value: 2.5 },
+          { date: 'Nov 21', value: 8 },
+          { date: 'Nov 22', value: 11 },
         ],
-        'avg-minutes': [
+        'rage-quits': [
           { date: 'Oct 23', value: 0 },
           { date: 'Oct 24', value: 0 },
           { date: 'Oct 25', value: 0 },
           { date: 'Oct 26', value: 0 },
           { date: 'Oct 27', value: 0 },
           { date: 'Oct 28', value: 0 },
-          { date: 'Oct 29', value: 1.3 },
+          { date: 'Oct 29', value: 2 },
           { date: 'Oct 30', value: 0 },
           { date: 'Nov 20', value: 0 },
-          { date: 'Nov 21', value: 1.2 },
-          { date: 'Nov 22', value: 1.25 },
+          { date: 'Nov 21', value: 3 },
+          { date: 'Nov 22', value: 4 },
         ],
       };
     } else {
@@ -259,46 +258,46 @@ const TabbedMetricsWithChart: React.FC<TabbedMetricsWithChartProps> = ({ activeT
           { date: 'Oct 30', value: 2 },
           { date: 'Nov 20', value: 5 },
           { date: 'Nov 21', value: 8 },
-          { date: 'Nov 22', value: 16 },
+          { date: 'Nov 22', value: 17 },
         ],
-        duration: [
+        buzzwords: [
           { date: 'Oct 23', value: 0 },
           { date: 'Oct 24', value: 0 },
-          { date: 'Oct 25', value: 25 },
+          { date: 'Oct 25', value: 22 },
           { date: 'Oct 26', value: 0 },
-          { date: 'Oct 27', value: 35 },
-          { date: 'Oct 28', value: 28 },
-          { date: 'Oct 29', value: 42 },
-          { date: 'Oct 30', value: 38 },
-          { date: 'Nov 20', value: 45 },
-          { date: 'Nov 21', value: 48 },
-          { date: 'Nov 22', value: 51 },
+          { date: 'Oct 27', value: 24 },
+          { date: 'Oct 28', value: 23 },
+          { date: 'Oct 29', value: 25 },
+          { date: 'Oct 30', value: 25 },
+          { date: 'Nov 20', value: 26 },
+          { date: 'Nov 21', value: 27 },
+          { date: 'Nov 22', value: 26.8 },
         ],
-        'total-minutes': [
+        contradictions: [
           { date: 'Oct 23', value: 0 },
           { date: 'Oct 24', value: 0 },
-          { date: 'Oct 25', value: 0.4 },
+          { date: 'Oct 25', value: 2 },
           { date: 'Oct 26', value: 0 },
-          { date: 'Oct 27', value: 1.2 },
-          { date: 'Oct 28', value: 0.5 },
-          { date: 'Oct 29', value: 2.1 },
-          { date: 'Oct 30', value: 1.3 },
-          { date: 'Nov 20', value: 3.8 },
-          { date: 'Nov 21', value: 6.4 },
-          { date: 'Nov 22', value: 13.6 },
+          { date: 'Oct 27', value: 4 },
+          { date: 'Oct 28', value: 3 },
+          { date: 'Oct 29', value: 6 },
+          { date: 'Oct 30', value: 5 },
+          { date: 'Nov 20', value: 9 },
+          { date: 'Nov 21', value: 11 },
+          { date: 'Nov 22', value: 13 },
         ],
-        'avg-minutes': [
+        'rage-quits': [
           { date: 'Oct 23', value: 0 },
           { date: 'Oct 24', value: 0 },
-          { date: 'Oct 25', value: 0.4 },
+          { date: 'Oct 25', value: 1 },
           { date: 'Oct 26', value: 0 },
-          { date: 'Oct 27', value: 0.6 },
-          { date: 'Oct 28', value: 0.5 },
-          { date: 'Oct 29', value: 0.7 },
-          { date: 'Oct 30', value: 0.65 },
-          { date: 'Nov 20', value: 0.76 },
-          { date: 'Nov 21', value: 0.8 },
-          { date: 'Nov 22', value: 0.85 },
+          { date: 'Oct 27', value: 2 },
+          { date: 'Oct 28', value: 1 },
+          { date: 'Oct 29', value: 3 },
+          { date: 'Oct 30', value: 2 },
+          { date: 'Nov 20', value: 4 },
+          { date: 'Nov 21', value: 5 },
+          { date: 'Nov 22', value: 6 },
         ],
       };
     }
@@ -309,9 +308,9 @@ const TabbedMetricsWithChart: React.FC<TabbedMetricsWithChartProps> = ({ activeT
   const getChartTitle = (tab: string) => {
     switch (tab) {
       case 'calls': return 'Number of Calls';
-      case 'duration': return 'Average Duration (seconds)';
-      case 'total-minutes': return 'Total Minutes';
-      case 'avg-minutes': return 'Average Minutes per Call';
+      case 'buzzwords': return 'Buzzwords Per Minute';
+      case 'contradictions': return 'Policy Contradictions';
+      case 'rage-quits': return 'Total Rage Quits';
       default: return 'Metrics';
     }
   };
