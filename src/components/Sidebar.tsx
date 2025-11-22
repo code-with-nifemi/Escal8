@@ -5,16 +5,9 @@ import {
   Home, 
   Users, 
   BookOpen, 
-  Wrench, 
-  Mic, 
   TestTube, 
-  Link, 
   Phone, 
-  PhoneOutgoing, 
-  Settings,
-  Code,
-  Bell,
-  ArrowUp
+  Settings
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -25,29 +18,19 @@ const Sidebar = () => {
   const buildItems = [
     { icon: Users, label: 'Agents' },
     { icon: BookOpen, label: 'Knowledge Base' },
-    { icon: Wrench, label: 'Tools' },
-    { icon: Mic, label: 'Voices' },
   ];
 
   const evaluateItems = [
     { icon: Users, label: 'Conversations' },
-    { icon: TestTube, label: 'Tests', badge: 'New' },
-  ];
-
-  const integrationItems = [
-    { icon: Link, label: 'Integrations' },
+    { icon: TestTube, label: 'Tests' },
   ];
 
   const telephonyItems = [
     { icon: Phone, label: 'Phone Numbers' },
-    { icon: PhoneOutgoing, label: 'Outbound' },
   ];
 
   const bottomItems = [
     { icon: Settings, label: 'Settings' },
-    { icon: Code, label: 'Developers' },
-    { icon: Bell, label: 'Notifications' },
-    { icon: ArrowUp, label: 'Upgrade' },
   ];
 
   const renderMenuItem = (item: any, isActive = false) => (
@@ -103,7 +86,6 @@ const Sidebar = () => {
 
         {renderSection('Build', buildItems)}
         {renderSection('Evaluate', evaluateItems)}
-        {renderSection('Integrations', integrationItems)}
         {renderSection('Telephony', telephonyItems)}
       </div>
 

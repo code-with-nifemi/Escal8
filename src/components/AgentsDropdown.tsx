@@ -8,19 +8,22 @@ interface Agent {
   name: string;
 }
 
-const AgentsDropdown = () => {
+interface AgentsDropdownProps {
+  selectedAgent: string;
+  onAgentChange: (agent: string) => void;
+}
+
+const AgentsDropdown: React.FC<AgentsDropdownProps> = ({ selectedAgent, onAgentChange }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedAgent, setSelectedAgent] = useState('All agents');
   const [searchTerm, setSearchTerm] = useState('');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const agents: Agent[] = [
     { id: 'all', name: 'All agents' },
-    { id: 'agent_2', name: 'Custom Agent - agent_2' },
-    { id: 'agent_1', name: 'Custom Agent - agent_1' },
+    { id: 'middle_mgmt', name: 'Middle Management Queen' },
     { id: 'richard', name: 'Richard - CEO/Executive' },
     { id: 'jordan', name: 'Jordan - Help Desk Employee' },
-    { id: 'middle_mgmt', name: 'Middle Management Queen' },
+
   ];
 
   const filteredAgents = agents.filter(agent =>
@@ -39,7 +42,7 @@ const AgentsDropdown = () => {
   }, []);
 
   const handleAgentSelect = (agent: Agent) => {
-    setSelectedAgent(agent.name);
+    onAgentChange(agent.name);
     setIsOpen(false);
     setSearchTerm('');
   };
