@@ -20,7 +20,7 @@ export default function Home() {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Header */}
         <DashboardHeader selectedAgent={selectedAgent} onAgentChange={setSelectedAgent} />
-
+        
         {/* Dashboard Content */}
         <main className="flex-1 overflow-y-auto p-6">
           {/* Top Content Grid */}
@@ -30,13 +30,13 @@ export default function Home() {
               {/* Connected Tabbed Metrics with Chart */}
               <TabbedMetricsWithChart activeTab={activeTab} onTabChange={setActiveTab} selectedAgent={selectedAgent} />
             </div>
-
+            
             {/* Right Column - Agents List */}
             <div className="lg:col-span-1">
               <AgentsList selectedAgent={selectedAgent} />
             </div>
           </div>
-
+          
           {/* Full Width Bottom Chart */}
           <div className="w-full">
             <Charts selectedAgent={selectedAgent} />
