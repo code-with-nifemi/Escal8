@@ -1,13 +1,10 @@
-'use client';
-
 import React, { useState } from 'react';
-import { Hero } from '@/components/Hero';
-import { Features } from '@/components/Features';
-import { LiveDemo } from '@/components/LiveDemo';
+import { Hero } from './components/Hero';
+import { Features } from './components/Features';
+import { LiveDemo } from './components/LiveDemo';
 import { Menu, X, Bot } from 'lucide-react';
-import Link from 'next/link';
 
-export default function LandingPage() {
+function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -36,7 +33,7 @@ export default function LandingPage() {
             <a href="#product" className="text-sm font-semibold leading-6 text-white hover:text-indigo-400 transition-colors">Product</a>
             <a href="#features" className="text-sm font-semibold leading-6 text-white hover:text-indigo-400 transition-colors">Features</a>
             <a href="#pricing" className="text-sm font-semibold leading-6 text-white hover:text-indigo-400 transition-colors">Expensive Plans</a>
-            <Link href="/dashboard" className="text-sm font-semibold leading-6 text-white hover:text-indigo-400 transition-colors">Dashboard</Link>
+            <a href="#company" className="text-sm font-semibold leading-6 text-white hover:text-indigo-400 transition-colors">About Us</a>
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
             <a href="#demo" className="text-sm font-semibold leading-6 text-white flex items-center gap-1 hover:text-indigo-400 transition-colors">
@@ -70,7 +67,6 @@ export default function LandingPage() {
                     <a href="#product" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-slate-800">Product</a>
                     <a href="#features" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-slate-800">Features</a>
                     <a href="#pricing" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-slate-800">Expensive Plans</a>
-                    <Link href="/dashboard" className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-slate-800">Dashboard</Link>
                   </div>
                   <div className="py-6">
                     <a href="#demo" className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-white hover:bg-slate-800">Live Demo</a>
@@ -109,3 +105,5 @@ export default function LandingPage() {
     </div>
   );
 }
+
+export default App;

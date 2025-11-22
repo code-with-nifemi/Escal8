@@ -1,0 +1,155 @@
+name: Deploy Escal8 to AWS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+  AWS_ACCOUNT_ID: 177099687548
+  ECR_BACKEND_REPOSITORY: escal8-backend
+  ECR_FRONTEND_REPOSITORY: escal8-frontend
+  ECS_CLUSTER: production-escal8-cluster
+  BACKEND_SERVICE: production-escal8-backend-service
+  FRONTEND_SERVICE: production-escal8-frontend-service
+
+jobs:
+  deploy:
+    name: Deploy to AWS
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Create ECR repositories if they don't exist
+        run: |
+          aws ecr describe-repositories --repository-names ${{ env.ECR_BACKEND_REPOSITORY }} --region ${{ env.AWS_REGION }} || \
+          aws ecr create-repository --repository-name ${{ env.ECR_BACKEND_REPOSITORY }} --region ${{ env.AWS_REGION }}
+
+          aws ecr describe-repositories --repository-names ${{ env.ECR_FRONTEND_REPOSITORY }} --region ${{ env.AWS_REGION }} || \
+          aws ecr create-repository --repository-name ${{ env.ECR_FRONTEND_REPOSITORY }} --region ${{ env.AWS_REGION }}
+
+      - name: Build, tag, and push Backend image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          cd backend
+          docker build -t $ECR_REGISTRY/$ECR_BACKEND_REPOSITORY:$IMAGE_TAG .
+          docker tag $ECR_REGISTRY/$ECR_BACKEND_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_BACKEND_REPOSITORY:latest
+          docker push $ECR_REGISTRY/$ECR_BACKEND_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_BACKEND_REPOSITORY:latest
+          echo "backend_image=$ECR_REGISTRY/$ECR_BACKEND_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        id: build-backend-image
+
+      - name: Build, tag, and push Frontend image to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          cd Escal8
+          docker build -t $ECR_REGISTRY/$ECR_FRONTEND_REPOSITORY:$IMAGE_TAG .
+          docker tag $ECR_REGISTRY/$ECR_FRONTEND_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_FRONTEND_REPOSITORY:latest
+          docker push $ECR_REGISTRY/$ECR_FRONTEND_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_FRONTEND_REPOSITORY:latest
+          echo "frontend_image=$ECR_REGISTRY/$ECR_FRONTEND_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+        id: build-frontend-image
+
+      - name: Check if CloudFormation stack exists
+        id: check-stack
+        run: |
+          if aws cloudformation describe-stacks --stack-name escal8-production --region ${{ env.AWS_REGION }} 2>&1 | grep -q "does not exist"; then
+            echo "stack_exists=false" >> $GITHUB_OUTPUT
+          else
+            echo "stack_exists=true" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+
+      - name: Deploy CloudFormation Stack (Create)
+        if: steps.check-stack.outputs.stack_exists == 'false'
+        run: |
+          aws cloudformation create-stack \
+            --stack-name escal8-production \
+            --template-body file://aws/cloudformation-template.yaml \
+            --parameters \
+              ParameterKey=SupabaseURL,ParameterValue=${{ secrets.SUPABASE_URL }} \
+              ParameterKey=SupabaseKey,ParameterValue=${{ secrets.SUPABASE_KEY }} \
+              ParameterKey=ElevenLabsAPIKey,ParameterValue=${{ secrets.ELEVENLABS_API_KEY }} \
+            --capabilities CAPABILITY_IAM \
+            --region ${{ env.AWS_REGION }}
+
+          echo "Waiting for stack creation to complete..."
+          aws cloudformation wait stack-create-complete \
+            --stack-name escal8-production \
+            --region ${{ env.AWS_REGION }}
+
+      - name: Deploy CloudFormation Stack (Update)
+        if: steps.check-stack.outputs.stack_exists == 'true'
+        run: |
+          aws cloudformation update-stack \
+            --stack-name escal8-production \
+            --template-body file://aws/cloudformation-template.yaml \
+            --parameters \
+              ParameterKey=SupabaseURL,ParameterValue=${{ secrets.SUPABASE_URL }} \
+              ParameterKey=SupabaseKey,ParameterValue=${{ secrets.SUPABASE_KEY }} \
+              ParameterKey=ElevenLabsAPIKey,ParameterValue=${{ secrets.ELEVENLABS_API_KEY }} \
+            --capabilities CAPABILITY_IAM \
+            --region ${{ env.AWS_REGION }} || echo "No updates to be performed"
+
+          echo "Waiting for stack update to complete..."
+          aws cloudformation wait stack-update-complete \
+            --stack-name escal8-production \
+            --region ${{ env.AWS_REGION }} || echo "Stack update completed or no changes"
+
+      - name: Force new ECS deployment for Backend
+        run: |
+          aws ecs update-service \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --service ${{ env.BACKEND_SERVICE }} \
+            --force-new-deployment \
+            --region ${{ env.AWS_REGION }}
+
+      - name: Force new ECS deployment for Frontend
+        run: |
+          aws ecs update-service \
+            --cluster ${{ env.ECS_CLUSTER }} \
+            --service ${{ env.FRONTEND_SERVICE }} \
+            --force-new-deployment \
+            --region ${{ env.AWS_REGION }}
+
+      - name: Get Load Balancer URL
+        id: get-url
+        run: |
+          LB_URL=$(aws cloudformation describe-stacks \
+            --stack-name escal8-production \
+            --region ${{ env.AWS_REGION }} \
+            --query "Stacks[0].Outputs[?OutputKey=='LoadBalancerURL'].OutputValue" \
+            --output text)
+          echo "Application URL: $LB_URL"
+          echo "url=$LB_URL" >> $GITHUB_OUTPUT
+
+      - name: Deployment Summary
+        run: |
+          echo "### Deployment Successful! :rocket:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Application URL:** ${{ steps.get-url.outputs.url }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Backend Image:** ${{ steps.build-backend-image.outputs.backend_image }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Frontend Image:** ${{ steps.build-frontend-image.outputs.frontend_image }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Region:** ${{ env.AWS_REGION }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Cluster:** ${{ env.ECS_CLUSTER }}" >> $GITHUB_STEP_SUMMARY
