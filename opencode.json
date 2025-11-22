@@ -1,0 +1,27 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "supabase-mcp": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@supabase/mcp-server-supabase@latest",
+        "--access-token",
+        "sbp_1842acc8e1d834a69d42533907d0f43084a1c6f9"
+      ],
+      "enabled": true
+    },
+    "ElevenLabs": {
+      "type": "local",
+      "command": ["uvx", "elevenlabs-mcp"],
+      "environment": {
+        "ELEVENLABS_API_KEY": "sk_5000b966735d8be96ccd7682b4223b384e128f5db4838520"
+      }
+    }
+  }
+}
